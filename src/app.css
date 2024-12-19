@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@layer base {
+  ::-webkit-scrollbar { display: none; }
+  * {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+
+    /* `overscroll-behavior-x` is for browser back */
+    overscroll-behavior-y: none;
+
+  }
+
+  /* input number arrow */
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type=number] {
+    -moz-appearance: textfield;
+  }
+
+}
+
+@theme {
+  --color-primary: var(--color-indigo-500);
+  --color-primary-active: var(--color-indigo-400);
+  --color-primary-fg: var(--color-white);
+
+  --color-gray: var(--color-gray-600);
+  --color-gray-active: var(--color-gray-700);
+  --color-gray-fg: white;
+
+  --color-neutral: var(--color-white);
+  --color-neutral-active: var(--color-white);
+  --color-neutral-fg: var(--color-black);
+
+  --color-dim: var(--color-gray-200);
+
+  --color-subtext: var(--color-gray-400);
+
+  --z-index-headbar: 40;
+  --z-index-float-action: 40;
+  --z-index-vault: 99990;
+}
+
+@layer base {
+  html, body {
+    @apply overflow-hidden bg-primary;
+  }
+}
+
+@utility variant-primary { @apply bg-primary text-primary-fg };
+@utility variant-neutral { @apply bg-neutral text-neutral-fg };
+@utility variant-gray { @apply bg-gray text-gray-fg; }
+
+/* this layer must exists with whatever of its content, to make something work */
+/* must before components layers, and after all @utilities */
+@layer utilities { .deez { background: transparent; } }
+
+/* button */
+@utility btn { @apply px-3 py-2 }
+@utility btn-primary { @apply variant-primary active:bg-primary-active transition-colors; }
+@utility btn-neutral { @apply variant-neutral active:bg-neutral-active transition-colors; }
+@utility btn-gray { @apply variant-gray active:bg-gray-active transition-colors; }
+@utility btn-ghost { @apply bg-black/0 active:bg-black/30 transition-colors; }
+
+@utility btn-decor { @apply font-bold rounded-md shadow outline-offset-2 cursor-pointer; }
+
+/* input */
+@utility input {
+  @apply px-3 py-3 rounded-md bg-white text-black
+  border-red-600 shadow
+  focus:outline-none focus:ring-2 focus:ring-primary;
+}
+
+/* vault thumb */
+@utility with-thumb {
+  &::after {
+    content: " ";
+    left: 50%;
+    translate: -50%;
+    @apply absolute top-4 h-1 w-10 mx-auto bg-subtext rounded-md;
+  }
+}
+
+/* vault */
+@utility vault {
+  @apply relative min-h-screen pt-12 bg-dim shadow-up rounded-t-3xl with-thumb;
+}
+
+/* shadow with light from below */
+@utility shadow-up {
+  box-shadow: 0 -12px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+}
+
+/* fullscreen */
+@utility fullscreen {
+  @apply w-screen h-screen;
+}
+
+@utility fixed-fullscreen {
+  @apply fixed top-0 left-0 fullscreen;
+}
+
+@variant fullscroll (&.fullscroll);
+
