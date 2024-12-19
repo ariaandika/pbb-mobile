@@ -6,14 +6,16 @@ import session from './lib/session.svelte';
 import { mount } from 'svelte'
 
 try {
-  mount(App, {
-    context: await window.asyncSetup(
-      router.setup,
-      session.setup
-    ),
-    target: document.getElementById('app')!,
-    intro: true,
-  })
+  (async() => {
+    mount(App, {
+      context: await window.asyncSetup(
+        router.setup,
+        session.setup
+      ),
+      target: document.getElementById('app')!,
+      intro: true,
+    })
+  })()
 } catch (err) {
   console.error("Setup error: ", err)
   // mount()

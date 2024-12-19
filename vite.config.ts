@@ -10,14 +10,6 @@ console.log("isTauri", host)
 export default defineConfig({
   define: { APP: host ? `"tauri"` : `"browser"` },
   server: {
-    host: host || false,
-    hmr: host
-      ? {
-          protocol: "ws",
-          host,
-          port: 1421,
-        }
-      : undefined,
     watch: {
       ignored: ["**/src-tauri/**"],
     },
