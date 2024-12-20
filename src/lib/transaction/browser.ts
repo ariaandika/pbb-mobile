@@ -70,4 +70,8 @@ export default {
     localStorage.setItem(KEY, JSON.stringify(data));
   },
 
+  async clear() {
+    localStorage.removeItem(KEY)
+  },
+
 } satisfies Io

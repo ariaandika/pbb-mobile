@@ -1,5 +1,6 @@
 import type { Session } from "../session.svelte";
 export type { Session } from "../session.svelte";
+import { platform } from "../util";
 import browser from "./browser";
 
 export interface Io {
@@ -9,4 +10,4 @@ export interface Io {
   login(name: string, passwd: string): Promise<Session>;
 }
 
-export default window.envfrom<Io>("Session", { browser })
+export default platform.from<Io>("Session", { browser })

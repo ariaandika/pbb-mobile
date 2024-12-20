@@ -3,18 +3,18 @@
   import Login from "./Login.svelte";
   import router from "../lib/router";
   import session from "../lib/session.svelte";
-  import system from "../lib/system";
+  // import system from "../lib/system";
 
   let url = router.context();
   let sessionData = session.context();
   let user = $derived(sessionData.value);
 
-  router.onPopState(e => {
-    if (e.detail.target.pathname.split("/").length <= 2) {
-      e.preventDefault()
-      system.exit()
-    }
-  });
+  // router.onPopState(e => {
+  //   if (e.detail.target.pathname.split("/").length <= 2) {
+  //     e.preventDefault()
+  //     system.exit()
+  //   }
+  // });
 
   $inspect("Router",url);
   $inspect("User",user);

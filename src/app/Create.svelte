@@ -1,6 +1,6 @@
 <script lang="ts">
   import type { TransactionCreate } from "../lib/transaction.svelte";
-  import icons from "../lib/icons";
+  import { icons } from "../lib/util";
   import { vault } from "../lib/animation";
   import { fade } from "svelte/transition";
 

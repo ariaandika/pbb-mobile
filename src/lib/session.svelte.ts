@@ -56,12 +56,12 @@ export function context(): SessionContext {
 export async function login(name: string, passwd: string) {
   const session = await io.login(name, passwd)
   await io.saveSession(session)
-  window.dispatch(LOGIN, { session })
+  window.dispatchEvent(new CustomEvent(LOGIN, { detail: { session } }))
 }
 
 export async function logout() {
   await io.removeSession();
-  window.dispatch(LOGOUT)
+  window.dispatchEvent(new CustomEvent(LOGOUT))
 }
 
 export default {

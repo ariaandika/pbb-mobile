@@ -1,5 +1,6 @@
 import type { Transaction, TransactionCreate } from "../transaction.svelte"
 export type { Transaction, TransactionCreate } from "../transaction.svelte"
+import { platform } from "../util";
 import browser from "./browser";
 
 export interface Io {
@@ -7,6 +8,7 @@ export interface Io {
   list(): Promise<Transaction[]>;
   add(tr: TransactionCreate): Promise<void>;
   mock(): Promise<void>
+  clear(): Promise<void>;
 }
 
-export default window.envfrom<Io>("Session", { browser })
+export default platform.from<Io>("Session", { browser })

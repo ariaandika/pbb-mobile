@@ -1,6 +1,6 @@
 <script>
   import List from "./lib/List.svelte";
-  import icons from "../lib/icons";
+  import { icons } from "../lib/util";
   import { fade, fly } from "svelte/transition";
 
 </script>

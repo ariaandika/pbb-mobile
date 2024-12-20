@@ -1,5 +1,6 @@
 import { getContext, hasContext, setContext } from "svelte";
 import io from "./transaction/io";
+import date from "./date";
 
 declare global {
   interface WindowEventMap {
@@ -97,19 +98,19 @@ export function recentSummary2(data: Transaction[]) {
   for (const tr of data.toReversed()) {
     if (results.length == 0) {
       results.push({
-        id: '' + tr.time.getMonthId() + tr.time.getFullYear(),
-        label: tr.time.getMonthId(),
+        id: '' + date.getMonthId(tr.time) + tr.time.getFullYear(),
+        label: date.getMonthId(tr.time),
         input: 0,
         output: 0,
         total: 0,
       })
     }
 
-    if (tr.time.getMonthId() !== results.at(-1)!.label) {
+    if (date.getMonthId(tr.time) !== results.at(-1)!.label) {
       results.at(-1)!.total = current;
       results.push({
-        id: '' + tr.time.getMonthId() + tr.time.getFullYear(),
-        label: tr.time.getMonthId(),
+        id: '' + date.getMonthId(tr.time) + tr.time.getFullYear(),
+        label: date.getMonthId(tr.time),
         input: 0,
         output: 0,
         total: 0,

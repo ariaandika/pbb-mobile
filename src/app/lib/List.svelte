@@ -1,6 +1,7 @@
 <script lang="ts">
   import transaction, { type Summary } from "../../lib/transaction.svelte";
-  import icons from "../../lib/icons";
+  import { icons } from "../../lib/util";
+    import date from "../../lib/date";
 
   let promise = transaction.promise();
 
@@ -26,14 +27,14 @@
 
 
 {#snippet records()}
-  {@const trs = promise.data.filter(e => summary.find(f => f.label == e.time.getMonthId()))}
+  {@const trs = promise.data.filter(e => summary.find(f => f.label == date.getMonthId(e.time)))}
 
   {#each trs as { id, name, value, category, kind, time }, i (id)}
     {@const down = kind == "output"}
 
     <!-- Date Group -->
     {#if i == 0 || time.getMonth() != trs[i - 1].time.getMonth()}
-      {@const mon = time.getMonthId()}
+      {@const mon = date.getMonthId(time)}
       {@const year = time.getFullYear()}
       <div class="text-subtext">{mon} {year}</div>
     {/if}
@@ -65,7 +66,7 @@
           Rp. {value}
         </div>
         <div class="text-sm text-subtext">
-          {time.format()}
+          {date.format(time)}
         </div>
       </div>
     </div>

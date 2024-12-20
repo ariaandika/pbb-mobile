@@ -4,13 +4,15 @@
   import Menu from "./Menu.svelte";
   import All from "./All.svelte";
   import Monthly from "./Monthly.svelte";
+  import Debug from "./Debug.svelte";
   import { Tween } from "svelte/motion";
-  import icons from "../lib/icons";
-  import router from "../lib/router";
-  import session from "../lib/session.svelte";
-  import { fly } from "svelte/transition";
-  import { onFullScroll, paralax, vault } from "../lib/animation";
   import transaction, { type Summary } from "../lib/transaction.svelte"
+  import session from "../lib/session.svelte";
+  import router from "../lib/router";
+  import date from "../lib/date";
+  import { onFullScroll, paralax, vault } from "../lib/animation";
+  import { icons } from "../lib/util";
+  import { fly } from "svelte/transition";
 
   let intl = new Intl.NumberFormat("id-ID");
   let url = router.context()
@@ -139,12 +141,16 @@
   <section class="relative isolate z-vault">
     <Monthly/>
   </section>
+{:else if url.pathname == "/home/debug"}
+  <section class="relative isolate z-vault">
+    <Debug/>
+  </section>
 {/if}
 
 {#snippet records()}
   {@const trs = promise
     .data
-    .filter(e => summary.find(f => f.id == ('' + e.time.getMonthId() + e.time.getFullYear())))
+    .filter(e => summary.find(f => f.id == ('' + date.getMonthId(e.time) + e.time.getFullYear())))
   }
 
   {#each trs as { id, name, value, category, kind, time }, i (id)}
@@ -152,7 +158,7 @@
 
     <!-- Date Group -->
     {#if i == 0 || time.getMonth() != trs[i - 1].time.getMonth()}
-      {@const mon = time.getMonthId()}
+      {@const mon = date.getMonthId(time)}
       {@const year = time.getFullYear()}
       <div class="text-subtext">{mon} {year}</div>
     {/if}
@@ -184,14 +190,12 @@
           Rp. {value}
         </div>
         <div class="text-sm text-subtext">
-          {time.format()}
+          {date.format(time)}
         </div>
       </div>
     </div>
   {:else}
-    <button onclick={transaction.mock} class="btn btn-primary btn-decor">
-      Mock Data
-    </button>
+    <div class="font-bold">data kosong</div>
   {/each}
 {/snippet}
 

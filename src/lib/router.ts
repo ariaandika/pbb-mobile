@@ -25,11 +25,20 @@ export function setup(context: Map<any,any>) {
     router.href = detail.url.href;
   })
 
-  window.addEventListener("popstate", () => {
-    if (!window.dispatch(POPSTATE)) {
+  window.addEventListener("popstate", ({ state }) => {
+    const popStateEvent = new CustomEvent(POPSTATE, {
+      detail: {
+        target: new URL(location.href)
+      }
+    })
+
+    if (!window.dispatchEvent(popStateEvent)) {
       return
     }
-    router.href = location.href
+
+    if (state != null) {
+      router.href = location.href
+    }
   })
 
   window.addEventListener("click", e => {
@@ -38,7 +47,8 @@ export function setup(context: Map<any,any>) {
 
     if (anchor) {
       e.preventDefault();
-      goto(anchor.href)
+      (anchor.dataset.replace != undefined ? replace : goto)
+      (anchor.href);
     }
 
     if (target.closest('[data-back]')) {
@@ -58,7 +68,7 @@ export function goto(target: string | URL) {
     return;
   }
   history.pushState(null, "", url)
-  window.dispatch(GOTO, { url })
+  window.dispatchEvent(new CustomEvent(GOTO, { detail: { url } }))
 }
 
 /** same as goto but does not create a navigation stack */
@@ -68,22 +78,22 @@ export function replace(target: string | URL) {
     return;
   }
   history.replaceState(null, "", url)
-  window.dispatch(REPLACE, { url })
+  window.dispatchEvent(new CustomEvent(REPLACE, { detail: { url } }))
 }
 
 export function context(): URL {
   return getContext(CTX)
 }
 
-type OnPopStateProps = Parameters<typeof window.addEventListener<"router:popstate">>;
+type PopStateEvent = WindowEventMap["router:popstate"];
 
-export function onPopState(fn: OnPopStateProps[1], opt?: OnPopStateProps[2]) {
-  window.addEventListener(POPSTATE, fn, opt);
+export function onPopState(fn: (e: PopStateEvent) => any) {
+  window.addEventListener(POPSTATE, fn);
   return window.removeEventListener(POPSTATE, fn);
 }
 
 export default {
   CTX, GOTO, onPopState,
-  setup, goto, context,
+  setup, goto, replace, context,
 }
 

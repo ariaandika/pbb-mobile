@@ -1,7 +1,7 @@
 <script lang="ts">
   import ChartPie from "./lib/ChartPie.svelte";
   import transaction, { type Summary } from "../lib/transaction.svelte";
-  import icons from "../lib/icons";
+  import { icons } from "../lib/util";
   import { fade, fly } from "svelte/transition";
 
   let intl = new Intl.NumberFormat("id-ID");

@@ -1,22 +1,33 @@
-import "./lib/global"
 import './app.css'
+import './lib/util'
 import App from './app/App.svelte'
+import Debug from './app/Debug.svelte'
 import router from './lib/router';
 import session from './lib/session.svelte';
 import { mount } from 'svelte'
+import { logger } from './lib/util';
 
-try {
-  (async() => {
+
+async function main() {
+  try {
+    const context = new Map();
+
+    logger.setup();
+    router.setup(context);
+    await session.setup(context);
+
     mount(App, {
-      context: await window.asyncSetup(
-        router.setup,
-        session.setup
-      ),
+      context,
       target: document.getElementById('app')!,
-      intro: true,
     })
-  })()
-} catch (err) {
-  console.error("Setup error: ", err)
-  // mount()
+
+  } catch (err) {
+    console.error("Setup error: ", err)
+    mount(Debug, {
+      target: document.getElementById('app')!,
+    })
+  }
 }
+
+
+main()
