@@ -5,17 +5,23 @@ declare global {
   interface WindowEventMap {
     "router:popstate": CustomEvent<{ target: URL }>
     "router:goto": CustomEvent<{ url: URL }>
+    "router:replace": CustomEvent<{ url: URL }>
   }
 }
 
 export const CTX = Symbol("router");
 export const GOTO = "router:goto";
+export const REPLACE = "router:replace";
 export const POPSTATE = "router:popstate";
 
 export function setup(context: Map<any,any>) {
   const router = new SvelteURL(location.href);
 
   window.addEventListener(GOTO, ({ detail }) => {
+    router.href = detail.url.href;
+  })
+
+  window.addEventListener(REPLACE, ({ detail }) => {
     router.href = detail.url.href;
   })
 
@@ -53,6 +59,16 @@ export function goto(target: string | URL) {
   }
   history.pushState(null, "", url)
   window.dispatch(GOTO, { url })
+}
+
+/** same as goto but does not create a navigation stack */
+export function replace(target: string | URL) {
+  const url = new URL(target,location.origin)
+  if (url.href == location.href) {
+    return;
+  }
+  history.replaceState(null, "", url)
+  window.dispatch(REPLACE, { url })
 }
 
 export function context(): URL {
