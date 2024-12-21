@@ -33,11 +33,14 @@ export function setup(context: Map<any,any>) {
     })
 
     if (!window.dispatchEvent(popStateEvent)) {
+      console.log("popstate prevented")
       return
     }
 
     if (state != null) {
       router.href = location.href
+    } else {
+      console.warn("null state on navigation stack")
     }
   })
 
@@ -47,8 +50,7 @@ export function setup(context: Map<any,any>) {
 
     if (anchor) {
       e.preventDefault();
-      (anchor.dataset.replace != undefined ? replace : goto)
-      (anchor.href);
+      (anchor.dataset.replace != undefined ? replace : goto)(anchor.href);
     }
 
     if (target.closest('[data-back]')) {
@@ -59,6 +61,7 @@ export function setup(context: Map<any,any>) {
   })
 
   context.set(CTX, router)
+  console.log("router setup")
 }
 
 /** if target is equal to current url, nothing is performed */
@@ -67,7 +70,7 @@ export function goto(target: string | URL) {
   if (url.href == location.href) {
     return;
   }
-  history.pushState(null, "", url)
+  history.pushState(0, "", url)
   window.dispatchEvent(new CustomEvent(GOTO, { detail: { url } }))
 }
 
@@ -77,7 +80,7 @@ export function replace(target: string | URL) {
   if (url.href == location.href) {
     return;
   }
-  history.replaceState(null, "", url)
+  history.replaceState(0, "", url)
   window.dispatchEvent(new CustomEvent(REPLACE, { detail: { url } }))
 }
 
