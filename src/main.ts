@@ -12,7 +12,7 @@ async function main() {
   try {
     const context = new Map();
 
-    logger.setup();
+    // logger.setup();
     router.setup(context);
     await session.setup(context);
 

@@ -15,5 +15,15 @@ export default defineConfig({
       ignored: ["**/src-tauri/**"],
     },
   },
-  plugins: [svelte(),tailwindcss()],
+  plugins: [svelte(),tailwindcss(),{
+    name: "remote-logger",
+    configureServer(server) {
+      server.ws.on("app:log", (data) => {
+        console.log(data)
+      })
+      server.ws.on("app:err", (data) => {
+        console.log("[ERROR]",data)
+      })
+    }
+  }],
 })

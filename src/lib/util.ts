@@ -23,14 +23,18 @@ export namespace logger {
   }
 
   export function setup(capture?: boolean) {
-    if (capture ?? platform.isMobile) {
+    const isCustomLog = capture ?? platform.isMobile;
+    const isViteHmr = Boolean(import.meta.hot);
+    if (isCustomLog && isViteHmr) {
       console.log = function(...args) {
-        logs.push([LOG, args.map(e => JSON.stringify(e)).join(" ")])
+        import.meta.hot!.send('app:log', args.map(e => JSON.stringify(e)))
       }
       console.error = function(...args) {
-        logs.push([ERROR, args.map(e => JSON.stringify(e)).join(" ")])
+        import.meta.hot!.send('app:err', args.map(e => JSON.stringify(e)))
       }
     }
+
+    console.log("logger setup; isCustomLog:",isCustomLog,"isViteHmr:",isViteHmr)
   }
 }
 
