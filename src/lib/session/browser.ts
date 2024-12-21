@@ -1,14 +1,7 @@
-import type { Io, Session } from "./io"
+import type { Io } from "./io"
+import { unauthorize } from "./io"
 
 const KEY = "session";
-
-function unauthorize(): Session {
-  return {
-    name: "",
-    phone: "",
-    role: "unauthorized"
-  }
-}
 
 export default {
   async loadSession() {
@@ -24,7 +17,7 @@ export default {
     }
   },
 
-  async saveSession(session: Session) {
+  async saveSession(session) {
     localStorage.setItem(KEY, btoa(JSON.stringify(session)));
   },
 

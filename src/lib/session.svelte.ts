@@ -13,9 +13,13 @@ export const LOGOUT = "session:logout";
 
 export type Role = "bendahara" | "anggota" | "unauthorized";
 
+export type User = Session;
+
 export interface Session {
+  id?: number
   name: string
   phone: string
+  password?: string
   role: Role
 }
 
